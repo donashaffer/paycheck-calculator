@@ -3,11 +3,12 @@ from datetime import datetime
 from utils import parse_time_flexible
 import csv
 import os
+from storage import save_history
 
 st.title("Paycheck Calculator")
 
 filename = "paycheck_history.csv"
-
+0
 hourly_rate = st.number_input("Enter hourly rate: ")
 num_days = int(st.number_input("How many days do you want to enter? ", min_value=1, value=1, step=1))
 
@@ -70,11 +71,6 @@ if st.button("Calculate"):
         st.write(f"Total hours worked: {total_hours_all_days:.2f}")
         st.write(f"Total pay: ${total_pay:.2f}")
 
-        file_exists = os.path.isfile(filename)
-        with open(filename, mode="a", newline="") as file:
-            writer = csv.writer(file)
-            if not file_exists:
-                writer.writerow(["Date", "Clock In", "Clock Out", "Lunch Start", "Lunch End", "Hours Worked", "Pay"])
-            writer.writerows(day_records)
+        save_history(day_records)
 
         st.write(f"Saved to {filename}")
